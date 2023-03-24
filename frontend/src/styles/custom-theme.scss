@@ -1,0 +1,38 @@
+$surface-bg: #2e3c52;
+
+$primary: #21FA90;
+$secondary: #D2D7DF;
+$danger: lightcoral;
+$body-color: #b9cdee;
+$body-bg: #242F40;
+$text-muted: #96a8c6;
+$card-bg: $surface-bg;
+$modal-content-bg: $surface-bg;
+$dropdown-bg: $surface-bg;
+$dropdown-link-color: $body-color;
+$dropdown-link-hover-bg: transparent;
+$dropdown-link-hover-color: white;
+$dropdown-link-active-bg: transparent;
+$dropdown-link-active-color: white;
+$input-bg: transparent;
+$form-file-button-bg: $surface-bg;
+$navbar-dark-color: $body-color;
+$navbar-dark-hover-color: white;
+$navbar-dark-active-color: white;
+$tooltip-bg: $surface-bg;
+$tooltip-color: $body-color;
+$pagination-bg: $surface-bg;
+$pagination-hover-bg: $surface-bg;
+$pagination-focus-bg: $surface-bg;
+$pagination-border-color: transparent;
+$pagination-hover-border-color: transparent;
+$pagination-active-bg: $surface-bg;
+$pagination-active-color: $primary;
+$pagination-color: $body-color;
+$pagination-hover-color: $primary;
+$pagination-focus-color: $primary;
+$input-placeholder-color: rgba($body-color, 0.65);
+
+$enable-negative-margins: true;
+
+@import "~bootstrap/scss/bootstrap";
