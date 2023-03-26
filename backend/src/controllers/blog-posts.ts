@@ -1,9 +1,12 @@
 import { RequestHandler } from "express";
 import BlogPostModel from "../models/blog-post";
 
-export const getBlogPosts: RequestHandler = async(req, res, next) => {
+export const getBlogPosts: RequestHandler = async (req, res, next) => {
     try {
-        const allBlogPosts = await BlogPostModel.find().exec();
+        const allBlogPosts = await BlogPostModel
+            .find()
+            .sort({ _id: -1 })
+            .exec();
 
         res.status(200).json(allBlogPosts);
     } catch (error) {
@@ -18,9 +21,9 @@ interface BlogPostBody {
     body: string,
 }
 
-export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unknown> = async (req,res, next) => {
-    const {slug, title, summary, body} = req.body;
-  
+export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unknown> = async (req, res, next) => {
+    const { slug, title, summary, body } = req.body;
+
     try {
         const newPost = await BlogPostModel.create({
             slug, title, summary, body
