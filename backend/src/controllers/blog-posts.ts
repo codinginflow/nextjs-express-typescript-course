@@ -28,6 +28,7 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unkn
 
         res.status(201).json(newPost);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error });
     }
 }
