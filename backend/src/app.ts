@@ -15,6 +15,8 @@ app.use(cors({
     origin: env.WEBSITE_URL,
 }));
 
+app.use("/uploads/featured-images", express.static("uploads/featured-images"));
+
 app.use("/posts", blogPostRoutes);
 
 export default app;
