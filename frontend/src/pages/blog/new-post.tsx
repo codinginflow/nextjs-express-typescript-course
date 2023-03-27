@@ -5,6 +5,7 @@ import FormInputField from "@/components/form/FormInputField";
 import MarkdownEditor from "@/components/form/MarkdownEditor";
 import { generateSlug } from "@/utils/utils";
 import LoadingButton from "@/components/LoadingButton";
+import { useRouter } from "next/router";
 
 interface CreatePostFormData {
     slug: string,
@@ -15,13 +16,14 @@ interface CreatePostFormData {
 }
 
 export default function CreateBlogPostPage() {
+    const router = useRouter();
 
     const { register, handleSubmit, setValue, getValues, watch, formState: { errors, isSubmitting } } = useForm<CreatePostFormData>();
 
     async function onSubmit({ title, slug, summary, featuredImage, body }: CreatePostFormData) {
         try {
             await BlogApi.createBlogPost({ title, slug, summary, featuredImage: featuredImage[0], body });
-            alert("Post created successfully");
+            await router.push("/blog/" + slug);
         } catch (error) {
             console.error(error);
             alert(error);

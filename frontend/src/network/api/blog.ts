@@ -6,6 +6,16 @@ export async function getBlogPosts() {
     return response.data;
 }
 
+export async function getAllBlogPostSlugs() {
+    const response = await api.get<string[]>("/posts/slugs");
+    return response.data;
+}
+
+export async function getBlogPostBySlug(slug: string) {
+    const response = await api.get<BlogPost>("/posts/post/" + slug);
+    return response.data;
+}
+
 interface CreateBlogPostValues {
     slug: string,
     title: string,
