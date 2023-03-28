@@ -34,7 +34,10 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
 
         delete newUser.password;
 
-        res.status(201).json(newUser);
+        req.logIn(newUser, error => {
+            if (error) throw error;
+            res.status(201).json(newUser);
+        });
     } catch (error) {
         next(error);
     }
