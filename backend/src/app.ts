@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import usersRoutes from "./routes/users";
 import blogPostRoutes from "./routes/blog-posts";
 import cors from "cors";
 import env from "./env";
@@ -19,6 +20,7 @@ app.use(cors({
 
 app.use("/uploads/featured-images", express.static("uploads/featured-images"));
 
+app.use("/users", usersRoutes);
 app.use("/posts", blogPostRoutes);
 
 app.use((req, res, next) => next(createHttpError(404, "Endpoint not found")));
