@@ -4,6 +4,7 @@ import sharp from "sharp";
 import BlogPostModel from "../models/blog-post";
 import assertIsDefined from "../utils/assertIsDefined";
 import env from "../env";
+import createHttpError from "http-errors";
 
 export const getBlogPosts: RequestHandler = async (req, res, next) => {
     try {
@@ -14,7 +15,7 @@ export const getBlogPosts: RequestHandler = async (req, res, next) => {
 
         res.status(200).json(allBlogPosts);
     } catch (error) {
-        res.status(500).json({ error });
+        next(error);
     }
 }
 
@@ -25,8 +26,7 @@ export const getAllBlogPostSlugs: RequestHandler = async (req, res, next) => {
 
         res.status(200).json(slugs);
     } catch (error) {
-        console.error();
-        res.status(500).json({ error });
+        next(error);
     }
 }
 
@@ -35,13 +35,12 @@ export const getBlogPostBySlug: RequestHandler = async (req, res, next) => {
         const blogPost = await BlogPostModel.findOne({ slug: req.params.slug }).exec();
 
         if (!blogPost) {
-            return res.sendStatus(404);
+           throw createHttpError(404, "No blog post found for this slug");
         }
 
         res.status(200).json(blogPost);
     } catch (error) {
-        console.error();
-        res.status(500).json({ error });
+        next(error);
     }
 }
 
@@ -58,6 +57,12 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unkn
 
     try {
         assertIsDefined(featuredImage);
+
+        const existingSlug = await BlogPostModel.findOne({slug}).exec();
+
+        if (existingSlug) {
+            throw createHttpError(409, "Slug already taken. Please choose a different one.");
+        }
 
         const blogPostId = new mongoose.Types.ObjectId();
 
@@ -78,7 +83,6 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unkn
 
         res.status(201).json(newPost);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error });
+        next(error);
     }
 }
