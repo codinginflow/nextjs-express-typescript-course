@@ -4,6 +4,7 @@ export interface BlogPost {
     title: string,
     summary: string,
     body: string,
+    featuredImageUrl: string,
     createdAt: string,
     updatedAt: string,
 }
