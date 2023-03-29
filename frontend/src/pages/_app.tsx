@@ -10,10 +10,16 @@ import Footer from '@/components/Footer';
 import NextNProgress from "nextjs-progressbar";
 import SignUpModal from '@/components/auth/SignUpModal';
 import LoginModal from '@/components/auth/LoginModal';
+import { useEffect, useState } from 'react';
+import { User } from '@/models/user';
+import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function App({ Component, pageProps }: AppProps) {
+
+  const { user, userLoading, userLoadingError, mutateUser } = useAuthenticatedUser();
+
   return (
     <>
       <Head>
@@ -27,6 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <div className={inter.className}>
           <NextNProgress color='#21FA90' />
           <NavBar />
+          <div>{user?.username}</div>
           <main>
             <Container className={styles.pageContainer}>
               <Component {...pageProps} />
