@@ -1,9 +1,12 @@
 import { useForm } from "react-hook-form";
 import * as UsersApi from "@/network/api/users";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
 import LoadingButton from "../LoadingButton";
+import { useState } from "react";
+import { UnauthorizedError } from "@/network/http-errors";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 
 interface LoginFormData {
     username: string,
@@ -17,16 +20,25 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ onDismiss, onSignUpInsteadClicked, onForgotPasswordClicked }: LoginModalProps) {
+    const { mutateUser } = useAuthenticatedUser();
+
+    const [errorText, setErrorText] = useState<string | null>(null);
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>();
 
     async function onSubmit(credentials: LoginFormData) {
         try {
+            setErrorText(null);
             const user = await UsersApi.login(credentials);
-            alert(JSON.stringify(user));
+            mutateUser(user);
+            onDismiss();
         } catch (error) {
-            console.error(error);
-            alert(error);
+            if (error instanceof UnauthorizedError) {
+                setErrorText("Invalid credentials");
+            } else {
+                console.error(error);
+                alert(error);
+            }
         }
     }
 
@@ -37,6 +49,9 @@ export default function LoginModal({ onDismiss, onSignUpInsteadClicked, onForgot
             </Modal.Header>
 
             <Modal.Body>
+                {errorText &&
+                    <Alert variant="danger">{errorText}</Alert>
+                }
                 <Form onSubmit={handleSubmit(onSubmit)} noValidate>
                     <FormInputField
                         register={register("username")}
@@ -64,8 +79,8 @@ export default function LoginModal({ onDismiss, onSignUpInsteadClicked, onForgot
                     </LoadingButton>
                 </Form>
                 <div className="d-flex align-items-center gap-1 justify-content-center mt-1">
-                   Don&apos;t have an account yet?
-                    <Button variant="link">
+                    Don&apos;t have an account yet?
+                    <Button variant="link" onClick={onSignUpInsteadClicked}>
                         Sign Up
                     </Button>
                 </div>

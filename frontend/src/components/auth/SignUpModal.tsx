@@ -1,9 +1,13 @@
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as UsersApi from "@/network/api/users";
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
 import LoadingButton from "../LoadingButton";
+import { AxiosError } from "axios";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import { useState } from "react";
+import { BadRequestError, ConflictError } from "@/network/http-errors";
 
 interface SignUpFormData {
     username: string,
@@ -17,16 +21,25 @@ interface SignUpModalProps {
 }
 
 export default function SignUpModal({ onDismiss, onLoginInsteadClicked }: SignUpModalProps) {
+    const { mutateUser } = useAuthenticatedUser();
+
+    const [errorText, setErrorText] = useState<string | null>(null);
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignUpFormData>();
 
     async function onSubmit(credentials: SignUpFormData) {
         try {
+            setErrorText(null);
             const newUser = await UsersApi.signUp(credentials);
-            alert(JSON.stringify(newUser));
+            mutateUser(newUser);
+            onDismiss();
         } catch (error) {
-            console.error(error);
-            alert(error);
+            if (error instanceof ConflictError || error instanceof BadRequestError) {
+                setErrorText(error.message);
+            } else {
+                console.error(error);
+                alert(error);
+            }
         }
     }
 
@@ -37,6 +50,9 @@ export default function SignUpModal({ onDismiss, onLoginInsteadClicked }: SignUp
             </Modal.Header>
 
             <Modal.Body>
+                {errorText &&
+                    <Alert variant="danger">{errorText}</Alert>
+                }
                 <Form onSubmit={handleSubmit(onSubmit)} noValidate>
                     <FormInputField
                         register={register("username")}
@@ -66,7 +82,7 @@ export default function SignUpModal({ onDismiss, onLoginInsteadClicked }: SignUp
                 </Form>
                 <div className="d-flex align-items-center gap-1 justify-content-center mt-1">
                     Already have an account?
-                    <Button variant="link">
+                    <Button variant="link" onClick={onLoginInsteadClicked}>
                         Log In
                     </Button>
                 </div>
