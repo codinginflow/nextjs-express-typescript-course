@@ -21,8 +21,14 @@ h1 {
   font-weight: 600;
 }
 
-a {
+a,
+.btn-link {
   text-decoration: none;
+  padding: 0;
+}
+
+.btn-close {
+  filter: brightness(0) invert(1);
 }
 
 .rc-md-editor {
