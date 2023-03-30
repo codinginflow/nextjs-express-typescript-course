@@ -7,11 +7,16 @@ import LoadingButton from "../LoadingButton";
 import { useState } from "react";
 import { UnauthorizedError } from "@/network/http-errors";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { requiredStringSchema } from "@/utils/validation";
 
-interface LoginFormData {
-    username: string,
-    password: string,
-}
+const validationSchema = yup.object({
+    username: requiredStringSchema,
+    password: requiredStringSchema,
+});
+
+type LoginFormData = yup.InferType<typeof validationSchema>;
 
 interface LoginModalProps {
     onDismiss: () => void,
@@ -24,7 +29,9 @@ export default function LoginModal({ onDismiss, onSignUpInsteadClicked, onForgot
 
     const [errorText, setErrorText] = useState<string | null>(null);
 
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>();
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
+        resolver: yupResolver(validationSchema),
+    });
 
     async function onSubmit(credentials: LoginFormData) {
         try {
