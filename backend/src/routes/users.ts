@@ -1,10 +1,11 @@
 import express from "express";
 import passport from "passport";
 import * as UsersController from "../controllers/users";
+import requiresAuth from "../middlewares/requiresAuth";
 
 const router = express.Router();
 
-router.get("/me", UsersController.getAuthenticatedUser);
+router.get("/me", requiresAuth, UsersController.getAuthenticatedUser);
 
 router.post("/signup", UsersController.signUp);
 

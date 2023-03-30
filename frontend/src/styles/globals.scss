@@ -2,7 +2,7 @@
 @import 'react-markdown-editor-lite/lib/index.css';
 
 :root {
- 
+  --popup-box-shadow: 3px 3px 13px 4px rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -25,6 +25,18 @@ a,
 .btn-link {
   text-decoration: none;
   padding: 0;
+}
+
+.dropdown-menu {
+  box-shadow: var(--popup-box-shadow);
+}
+
+.tooltip-inner {
+  box-shadow: var(--popup-box-shadow);
+}
+
+.tooltip.show {
+  opacity: 1;
 }
 
 .btn-close {

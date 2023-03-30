@@ -5,3 +5,7 @@
 .object-fit-cover {
     object-fit: cover;
 }
+
+.w-fit-content {
+    width: fit-content;
+}

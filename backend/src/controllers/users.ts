@@ -2,12 +2,13 @@ import { RequestHandler } from "express";
 import createHttpError from "http-errors";
 import UserModel from "../models/user";
 import bcrypt from "bcrypt";
+import assertIsDefined from "../utils/assertIsDefined";
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
     const authenticatedUser = req.user;
 
     try {
-        if (!authenticatedUser) throw createHttpError(401);
+        assertIsDefined(authenticatedUser);
 
         const user = await UserModel.findById(authenticatedUser._id).select("+email").exec();
 
