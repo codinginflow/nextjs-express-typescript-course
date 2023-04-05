@@ -6,6 +6,11 @@ export async function getBlogPosts() {
     return response.data;
 }
 
+export async function getBlogPostsByUser(userId: string) {
+    const response = await api.get<BlogPost[]>(`/posts?authorId=${userId}`);
+    return response.data;
+}
+
 export async function getAllBlogPostSlugs() {
     const response = await api.get<string[]>("/posts/slugs");
     return response.data;

@@ -9,3 +9,7 @@
 .w-fit-content {
     width: fit-content;
 }
+
+.pre-line {
+    white-space: pre-line;
+}

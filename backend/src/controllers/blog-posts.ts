@@ -5,12 +5,16 @@ import BlogPostModel from "../models/blog-post";
 import assertIsDefined from "../utils/assertIsDefined";
 import env from "../env";
 import createHttpError from "http-errors";
-import { BlogPostBody } from "../validation/blog-posts";
+import { BlogPostBody, GetBlogPostsQuery } from "../validation/blog-posts";
 
-export const getBlogPosts: RequestHandler = async (req, res, next) => {
+export const getBlogPosts: RequestHandler<unknown, unknown, unknown, GetBlogPostsQuery> = async (req, res, next) => {
+    const authorId = req.query.authorId;
+
+    const filter = authorId ? { author: authorId } : {};
+
     try {
         const allBlogPosts = await BlogPostModel
-            .find()
+            .find(filter)
             .sort({ _id: -1 })
             .populate("author")
             .exec();
@@ -35,12 +39,12 @@ export const getAllBlogPostSlugs: RequestHandler = async (req, res, next) => {
 export const getBlogPostBySlug: RequestHandler = async (req, res, next) => {
     try {
         const blogPost = await BlogPostModel
-        .findOne({ slug: req.params.slug })
-        .populate("author")
-        .exec();
+            .findOne({ slug: req.params.slug })
+            .populate("author")
+            .exec();
 
         if (!blogPost) {
-           throw createHttpError(404, "No blog post found for this slug");
+            throw createHttpError(404, "No blog post found for this slug");
         }
 
         res.status(200).json(blogPost);
@@ -58,7 +62,7 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unkn
         assertIsDefined(featuredImage);
         assertIsDefined(authenticatedUser);
 
-        const existingSlug = await BlogPostModel.findOne({slug}).exec();
+        const existingSlug = await BlogPostModel.findOne({ slug }).exec();
 
         if (existingSlug) {
             throw createHttpError(409, "Slug already taken. Please choose a different one.");
