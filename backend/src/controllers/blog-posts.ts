@@ -9,17 +9,31 @@ import { BlogPostBody, GetBlogPostsQuery } from "../validation/blog-posts";
 
 export const getBlogPosts: RequestHandler<unknown, unknown, unknown, GetBlogPostsQuery> = async (req, res, next) => {
     const authorId = req.query.authorId;
+    const page = parseInt(req.query.page || "1");
+    const pageSize = 6;
 
     const filter = authorId ? { author: authorId } : {};
 
     try {
-        const allBlogPosts = await BlogPostModel
+        const getBlogPostsQuery = BlogPostModel
             .find(filter)
             .sort({ _id: -1 })
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
             .populate("author")
             .exec();
 
-        res.status(200).json(allBlogPosts);
+        const countDocumentsQuery = BlogPostModel.countDocuments(filter).exec();
+
+        const [blogPosts, totalResults] = await Promise.all([getBlogPostsQuery, countDocumentsQuery]);
+
+        const totalPages = Math.ceil(totalResults / pageSize);
+
+        res.status(200).json({
+            blogPosts,
+            page,
+            totalPages,
+        });
     } catch (error) {
         next(error);
     }

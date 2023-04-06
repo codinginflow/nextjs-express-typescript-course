@@ -43,6 +43,19 @@ a,
   filter: brightness(0) invert(1);
 }
 
+.page-link {
+  margin: 0 4px;
+  border-radius: 8px;
+}
+
+.page-link:not(:focus-visible) {
+  box-shadow: none;
+}
+
+.page-item.active .page-link {
+  font-weight: bold;
+}
+
 .rc-md-editor {
   & {
     border-radius: 0.375rem;

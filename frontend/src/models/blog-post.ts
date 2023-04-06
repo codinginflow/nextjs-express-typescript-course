@@ -11,3 +11,9 @@ export interface BlogPost {
     createdAt: string,
     updatedAt: string,
 }
+
+export interface BlogPostsPage {
+    blogPosts: BlogPost[],
+    page: number,
+    totalPages: number,
+}

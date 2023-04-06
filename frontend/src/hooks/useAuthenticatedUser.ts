@@ -3,7 +3,7 @@ import { UnauthorizedError } from "@/network/http-errors";
 import useSWR from "swr";
 
 export default function useAuthenticatedUser() {
-    const { data, isLoading, error, mutate } = useSWR("user",
+    const { data, isLoading, error, mutate } = useSWR("authenticated_user",
         async () => {
             try {
                 return await UsersApi.getAuthenticatedUser();
