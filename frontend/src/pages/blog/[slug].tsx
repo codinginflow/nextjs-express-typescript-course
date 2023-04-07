@@ -9,6 +9,7 @@ import Image from "next/image";
 import { NotFoundError } from "@/network/http-errors";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { FiEdit } from "react-icons/fi";
+import useSWR from "swr";
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const slugs = await BlogApi.getAllBlogPostSlugs();
@@ -27,7 +28,7 @@ export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({ params
         if (!slug) throw Error("slug missing");
 
         const post = await BlogApi.getBlogPostBySlug(slug);
-        return { props: { post } };
+        return { props: { fallbackPost: post } };
     } catch (error) {
         if (error instanceof NotFoundError) {
             return { notFound: true };
@@ -38,11 +39,24 @@ export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({ params
 }
 
 interface BlogPostPageProps {
-    post: BlogPost,
+    fallbackPost: BlogPost,
 }
 
-export default function BlogPostPage({ post: { _id, slug, title, summary, body, featuredImageUrl, author, createdAt, updatedAt } }: BlogPostPageProps) {
+export default function BlogPostPage({ fallbackPost }: BlogPostPageProps) {
     const { user } = useAuthenticatedUser();
+
+    const { data: blogPost } = useSWR(fallbackPost.slug, BlogApi.getBlogPostBySlug, { revalidateOnFocus: false });
+
+    const {
+        slug,
+        title,
+        summary,
+        body,
+        featuredImageUrl,
+        author,
+        createdAt,
+        updatedAt,
+    } = blogPost || fallbackPost;
 
     const createdUpdatedText = updatedAt > createdAt
         ? <>updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time></>
@@ -60,10 +74,10 @@ export default function BlogPostPage({ post: { _id, slug, title, summary, body, 
                     <Link
                         href={"/blog/edit-post/" + slug}
                         className="btn btn-outline-primary d-inline-flex align-items-center gap-1 mb-2">
-                            <FiEdit />
-                            Edit post
-                        </Link>
-                
+                        <FiEdit />
+                        Edit post
+                    </Link>
+
                 }
 
                 <div className="text-center mb-4">

@@ -7,6 +7,7 @@ import env from "../env";
 import createHttpError from "http-errors";
 import { BlogPostBody, DeleteBlogPostParams, GetBlogPostsQuery, UpdateBlogPostParams } from "../validation/blog-posts";
 import fs from "fs";
+import axios from "axios";
 
 export const getBlogPosts: RequestHandler<unknown, unknown, unknown, GetBlogPostsQuery> = async (req, res, next) => {
     const authorId = req.query.authorId;
@@ -149,6 +150,8 @@ export const updateBlogPost: RequestHandler<UpdateBlogPostParams, unknown, BlogP
 
         await postToEdit.save();
 
+        await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${slug}?secret=${env.POST_REVALIDATION_KEY}`);
+
         res.sendStatus(200);
     } catch (error) {
         next(error);
@@ -178,6 +181,8 @@ export const deleteBlogPost: RequestHandler<DeleteBlogPostParams, unknown, unkno
         }
 
         await postToDelete.deleteOne();
+
+        await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${postToDelete.slug}?secret=${env.POST_REVALIDATION_KEY}`);
 
         res.sendStatus(204);
     } catch (error) {

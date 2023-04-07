@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import app from "./app";
 import env from "./env";
+import dns from 'node:dns';
+dns.setDefaultResultOrder('ipv4first');
 
 const port = process.env.PORT;
 
