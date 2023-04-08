@@ -3,9 +3,12 @@ import createHttpError from "http-errors";
 import UserModel from "../models/user";
 import bcrypt from "bcrypt";
 import assertIsDefined from "../utils/assertIsDefined";
-import { SignUpBody, UpdateUserBody } from "../validation/users";
+import { RequestVerificationCodeBody, SignUpBody, UpdateUserBody } from "../validation/users";
 import sharp from "sharp";
 import env from "../env";
+import crypto from "crypto";
+import EmailVerificationToken from "../models/email-verification-token";
+import * as Email from "../utils/email";
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
     const authenticatedUser = req.user;
@@ -36,7 +39,7 @@ export const getUserByUsername: RequestHandler = async (req, res, next) => {
 }
 
 export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = async (req, res, next) => {
-    const { username, email, password: passwordRaw } = req.body;
+    const { username, email, password: passwordRaw, verificationCode } = req.body;
 
     try {
         const existingUsername = await UserModel.findOne({ username })
@@ -45,6 +48,14 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
 
         if (existingUsername) {
             throw createHttpError(409, "Username already taken");
+        }
+
+        const emailVerificationToken = await EmailVerificationToken.findOne({ email, verificationCode }).exec();
+
+        if (!emailVerificationToken) {
+            throw createHttpError(400, "Verification code incorrect or expired.");
+        } else {
+            await emailVerificationToken.deleteOne();
         }
 
         const passwordHashed = await bcrypt.hash(passwordRaw, 10);
@@ -64,6 +75,29 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
             if (error) throw error;
             res.status(201).json(newUser);
         });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const requestEmailVerificationCode: RequestHandler<unknown, unknown, RequestVerificationCodeBody, unknown> = async (req, res, next) => {
+    const { email } = req.body;
+
+    try {
+        const existingEmail = await UserModel.findOne({ email })
+        .collation({ locale: "en", strength: 2 })
+        .exec();
+
+        if (existingEmail) {
+            throw createHttpError(409, "A user with this email address already exists. Please log in instead.");
+        }
+
+        const verificationCode = crypto.randomInt(100000, 999999).toString();
+        await EmailVerificationToken.create({email, verificationCode});
+
+        await Email.sendVerificationCode(email, verificationCode);
+
+        res.sendStatus(200);
     } catch (error) {
         next(error);
     }

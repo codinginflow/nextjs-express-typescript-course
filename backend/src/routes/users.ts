@@ -4,7 +4,7 @@ import * as UsersController from "../controllers/users";
 import { profilePicUpload } from "../middlewares/image-upload";
 import requiresAuth from "../middlewares/requiresAuth";
 import validateRequestSchema from "../middlewares/validateRequestSchema";
-import { signUpSchema, updateUserSchema } from "../validation/users";
+import { requestVerificationCodeSchema, signUpSchema, updateUserSchema } from "../validation/users";
 import env from "../env";
 import setSessionReturnTo from "../middlewares/setSessionReturnTo";
 
@@ -15,6 +15,8 @@ router.get("/me", requiresAuth, UsersController.getAuthenticatedUser);
 router.get("/profile/:username", UsersController.getUserByUsername);
 
 router.post("/signup", validateRequestSchema(signUpSchema), UsersController.signUp);
+
+router.post("/verification-code", validateRequestSchema(requestVerificationCodeSchema), UsersController.requestEmailVerificationCode);
 
 router.post("/login", passport.authenticate("local"), (req, res) => res.status(200).json(req.user));
 
