@@ -12,6 +12,7 @@ import SignUpModal from "./auth/SignUpModal";
 import { User } from "@/models/user";
 import profilePicPlaceholder from "@/assets/images/profile-pic-placeholder.png";
 import * as UsersApi from "@/network/api/users";
+import ResetPasswordModal from "./auth/ResetPasswordModal";
 
 export default function NavBar() {
     const { user } = useAuthenticatedUser();
@@ -100,6 +101,7 @@ function LoggedInView({ user }: LoggedInViewProps) {
 function LoggedOutView() {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showSignUpModal, setShowSignUpModal] = useState(false);
+    const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
 
     return (
         <>
@@ -123,7 +125,10 @@ function LoggedOutView() {
                         setShowLoginModal(false);
                         setShowSignUpModal(true);
                     }}
-                    onForgotPasswordClicked={() => { }}
+                    onForgotPasswordClicked={() => {
+                        setShowLoginModal(false);
+                        setShowResetPasswordModal(true);
+                    }}
                 />
             }
             {showSignUpModal &&
@@ -132,6 +137,15 @@ function LoggedOutView() {
                     onLoginInsteadClicked={() => {
                         setShowSignUpModal(false);
                         setShowLoginModal(true);
+                    }}
+                />
+            }
+            {showResetPasswordModal &&
+                <ResetPasswordModal
+                    onDismiss={() => setShowResetPasswordModal(false)}
+                    onSignUpClicked={() => {
+                        setShowResetPasswordModal(false);
+                        setShowSignUpModal(true);
                     }}
                 />
             }

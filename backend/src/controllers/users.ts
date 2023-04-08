@@ -3,12 +3,14 @@ import createHttpError from "http-errors";
 import UserModel from "../models/user";
 import bcrypt from "bcrypt";
 import assertIsDefined from "../utils/assertIsDefined";
-import { RequestVerificationCodeBody, SignUpBody, UpdateUserBody } from "../validation/users";
+import { RequestVerificationCodeBody, ResetPasswordBody, SignUpBody, UpdateUserBody } from "../validation/users";
 import sharp from "sharp";
 import env from "../env";
 import crypto from "crypto";
 import EmailVerificationToken from "../models/email-verification-token";
 import * as Email from "../utils/email";
+import PasswordResetToken from "../models/password-reset-token";
+import { destroyAllActiveSessionsForUser } from "../utils/auth";
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
     const authenticatedUser = req.user;
@@ -85,19 +87,83 @@ export const requestEmailVerificationCode: RequestHandler<unknown, unknown, Requ
 
     try {
         const existingEmail = await UserModel.findOne({ email })
-        .collation({ locale: "en", strength: 2 })
-        .exec();
+            .collation({ locale: "en", strength: 2 })
+            .exec();
 
         if (existingEmail) {
             throw createHttpError(409, "A user with this email address already exists. Please log in instead.");
         }
 
         const verificationCode = crypto.randomInt(100000, 999999).toString();
-        await EmailVerificationToken.create({email, verificationCode});
+        await EmailVerificationToken.create({ email, verificationCode });
 
         await Email.sendVerificationCode(email, verificationCode);
 
         res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const requestResetPasswordCode: RequestHandler<unknown, unknown, RequestVerificationCodeBody, unknown> = async (req, res, next) => {
+    const { email } = req.body;
+
+    try {
+        const user = await UserModel.findOne({ email })
+            .collation({ locale: "en", strength: 2 })
+            .exec();
+
+        if (!user) {
+            throw createHttpError(404, "A user with this email doesn't exist. Please sign up instead.");
+        }
+
+        const verificationCode = crypto.randomInt(100000, 999999).toString();
+        await PasswordResetToken.create({ email, verificationCode });
+
+        await Email.sendPasswordResetCode(email, verificationCode);
+
+        res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const resetPassword: RequestHandler<unknown, unknown, ResetPasswordBody, unknown> = async (req, res, next) => {
+    const { email, password: newPasswordRaw, verificationCode } = req.body;
+
+    try {
+        const existingUser = await UserModel.findOne({ email }).select("+email")
+            .collation({ locale: "en", strength: 2 })
+            .exec();
+
+        if (!existingUser) {
+            throw createHttpError(404, "User not found");
+        }
+
+        const passwordResetToken = await PasswordResetToken.findOne({ email, verificationCode }).exec();
+
+        if (!passwordResetToken) {
+            throw createHttpError(400, "Verification code incorrect or expired.");
+        } else {
+            await passwordResetToken.deleteOne();
+        }
+
+        await destroyAllActiveSessionsForUser(existingUser._id.toString());
+
+        const newPasswordHashed = await bcrypt.hash(newPasswordRaw, 10);
+
+        existingUser.password = newPasswordHashed;
+
+        await existingUser.save();
+
+        const user = existingUser.toObject();
+
+        delete user.password;
+
+        req.logIn(user, error => {
+            if (error) throw error;
+            res.status(200).json(user);
+        });
     } catch (error) {
         next(error);
     }
