@@ -10,6 +10,7 @@ import { NotFoundError } from "@/network/http-errors";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { FiEdit } from "react-icons/fi";
 import useSWR from "swr";
+import BlogCommentSection from "@/components/comments/BlogCommentSection";
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const slugs = await BlogApi.getAllBlogPostSlugs();
@@ -48,6 +49,7 @@ export default function BlogPostPage({ fallbackPost }: BlogPostPageProps) {
     const { data: blogPost } = useSWR(fallbackPost.slug, BlogApi.getBlogPostBySlug, { revalidateOnFocus: false });
 
     const {
+        _id,
         slug,
         title,
         summary,
@@ -104,6 +106,8 @@ export default function BlogPostPage({ fallbackPost }: BlogPostPageProps) {
                         {body}
                     </div>
                 </article>
+                <hr />
+                <BlogCommentSection blogPostId={_id} />
             </div>
         </>
     );
