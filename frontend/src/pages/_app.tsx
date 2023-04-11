@@ -1,5 +1,6 @@
 import Footer from '@/components/Footer';
 import NavBar from '@/components/NavBar';
+import AuthModalsProvider from '@/components/auth/AuthModalsProvider';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 import styles from "@/styles/App.module.css";
 import '@/styles/globals.scss';
@@ -28,23 +29,25 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <SSRProvider>
-        <div className={inter.className}>
-          <NextNProgress color='#21FA90' />
-          <NavBar />
-          <main>
-            <Container className={styles.pageContainer}>
-              <Component {...pageProps} />
-            </Container>
-          </main>
-          <Footer />
-        </div>
+        <AuthModalsProvider>
+          <div className={inter.className}>
+            <NextNProgress color='#21FA90' />
+            <NavBar />
+            <main>
+              <Container className={styles.pageContainer}>
+                <Component {...pageProps} />
+              </Container>
+            </main>
+            <Footer />
+          </div>
+        </AuthModalsProvider>
       </SSRProvider>
     </>
   );
 }
 
 function useOnboardingRedirect() {
-  const {user} = useAuthenticatedUser();
+  const { user } = useAuthenticatedUser();
   const router = useRouter();
 
   useEffect(() => {

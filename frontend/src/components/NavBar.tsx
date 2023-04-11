@@ -6,13 +6,14 @@ import logo from "@/assets/images/flow-blog-logo.png";
 import Image from "next/image";
 import styles from "@/styles/NavBar.module.css";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import LoginModal from "./auth/LoginModal";
 import SignUpModal from "./auth/SignUpModal";
 import { User } from "@/models/user";
 import profilePicPlaceholder from "@/assets/images/profile-pic-placeholder.png";
 import * as UsersApi from "@/network/api/users";
 import ResetPasswordModal from "./auth/ResetPasswordModal";
+import { AuthModalsContext } from "./auth/AuthModalsProvider";
 
 export default function NavBar() {
     const { user } = useAuthenticatedUser();
@@ -99,56 +100,21 @@ function LoggedInView({ user }: LoggedInViewProps) {
 }
 
 function LoggedOutView() {
-    const [showLoginModal, setShowLoginModal] = useState(false);
-    const [showSignUpModal, setShowSignUpModal] = useState(false);
-    const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+    const authModalsContext = useContext(AuthModalsContext);
 
     return (
-        <>
-            <Nav className="ms-auto">
-                <Button
-                    variant="outline-primary"
-                    className="ms-md-2 mt-2 mt-md-0"
-                    onClick={() => setShowLoginModal(true)}>
-                    Log In
-                </Button>
-                <Button
-                    onClick={() => setShowSignUpModal(true)}
-                    className="ms-md-2 mt-2 mt-md-0">
-                    Sign Up
-                </Button>
-            </Nav>
-            {showLoginModal &&
-                <LoginModal
-                    onDismiss={() => setShowLoginModal(false)}
-                    onSignUpInsteadClicked={() => {
-                        setShowLoginModal(false);
-                        setShowSignUpModal(true);
-                    }}
-                    onForgotPasswordClicked={() => {
-                        setShowLoginModal(false);
-                        setShowResetPasswordModal(true);
-                    }}
-                />
-            }
-            {showSignUpModal &&
-                <SignUpModal
-                    onDismiss={() => setShowSignUpModal(false)}
-                    onLoginInsteadClicked={() => {
-                        setShowSignUpModal(false);
-                        setShowLoginModal(true);
-                    }}
-                />
-            }
-            {showResetPasswordModal &&
-                <ResetPasswordModal
-                    onDismiss={() => setShowResetPasswordModal(false)}
-                    onSignUpClicked={() => {
-                        setShowResetPasswordModal(false);
-                        setShowSignUpModal(true);
-                    }}
-                />
-            }
-        </>
+        <Nav className="ms-auto">
+            <Button
+                variant="outline-primary"
+                className="ms-md-2 mt-2 mt-md-0"
+                onClick={() => authModalsContext.showLoginModal()}>
+                Log In
+            </Button>
+            <Button
+                onClick={() => authModalsContext.showSignUpModal()}
+                className="ms-md-2 mt-2 mt-md-0">
+                Sign Up
+            </Button>
+        </Nav>
     );
 }
