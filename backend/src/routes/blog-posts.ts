@@ -5,7 +5,7 @@ import requiresAuth from "../middlewares/requiresAuth";
 import validateRequestSchema from "../middlewares/validateRequestSchema";
 import { createBlogPostSchema, deleteBlogPostSchema, getBlogPostsSchema, updateBlogPostSchema } from "../validation/blog-posts";
 import { createPostRateLimit, updatePostRateLimit } from "../middlewares/rate-limit";
-import { createCommentSchema, getCommentsSchema } from "../validation/comments";
+import { createCommentSchema, deleteCommentSchema, getCommentRepliesSchema, getCommentsSchema, updateCommentSchema } from "../validation/comments";
 
 const router = express.Router();
 
@@ -24,5 +24,11 @@ router.delete("/:blogPostId", requiresAuth, validateRequestSchema(deleteBlogPost
 router.get("/:blogPostId/comments", validateRequestSchema(getCommentsSchema), BlogPostsController.getCommentsForBlogPost);
 
 router.post("/:blogPostId/comments", requiresAuth, validateRequestSchema(createCommentSchema), BlogPostsController.createComment);
+
+router.get("/comments/:commentId/replies", validateRequestSchema(getCommentRepliesSchema), BlogPostsController.getCommentReplies);
+
+router.patch("/comments/:commentId", requiresAuth, validateRequestSchema(updateCommentSchema), BlogPostsController.updateComment);
+
+router.delete("/comments/:commentId", requiresAuth, validateRequestSchema(deleteCommentSchema), BlogPostsController.deleteComment);
 
 export default router;

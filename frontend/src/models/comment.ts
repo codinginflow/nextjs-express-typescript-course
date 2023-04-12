@@ -8,6 +8,7 @@ export interface Comment {
     text: string,
     createdAt: string,
     updatedAt: string,
+    repliesCount?: number,
 }
 
 export interface CommentsPage {

@@ -65,7 +65,21 @@ export async function getCommentsForBlogPost(blogPostId: string, continueAfterId
     return response.data;
 }
 
+export async function getRepliesForComment(commentId: string, continueAfterId?: string) {
+    const response = await api.get<CommentsPage>(`/posts/comments/${commentId}/replies?${continueAfterId ? "continueAfterId=" + continueAfterId : ""}`);
+    return response.data;
+}
+
 export async function createComment(blogPostId: string, parentCommentId: string | undefined, text: string) {
     const response = await api.post<Comment>(`/posts/${blogPostId}/comments`, { text, parentCommentId });
     return response.data;
+}
+
+export async function updateComment(commentId: string, newText: string) {
+    const response = await api.patch<Comment>("/posts/comments/" + commentId, { newText });
+    return response.data;
+}
+
+export async function deleteComment(commentId: string) {
+    await api.delete("/posts/comments/" + commentId);
 }

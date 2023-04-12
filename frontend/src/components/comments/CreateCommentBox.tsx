@@ -1,6 +1,6 @@
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { Comment } from "@/models/comment";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import * as yup from "yup";
 import { AuthModalsContext } from "../auth/AuthModalsProvider";
 import { useForm } from "react-hook-form";
@@ -21,13 +21,17 @@ interface CreateCommentBoxProps {
     parentCommentId?: string,
     title: string,
     onCommentCreated: (comment: Comment) => void,
+    showCancel?: boolean,
+    onCancel?: () => void,
+    defaultText?: string,
 }
 
-export default function CreateCommentBox({ blogPostId, parentCommentId, title, onCommentCreated }: CreateCommentBoxProps) {
+export default function CreateCommentBox({ blogPostId, parentCommentId, title, onCommentCreated, showCancel, onCancel, defaultText }: CreateCommentBoxProps) {
     const { user } = useAuthenticatedUser();
     const authModalsContext = useContext(AuthModalsContext);
 
-    const { register, handleSubmit, formState: { isSubmitting }, reset } = useForm<CreateCommentInput>({
+    const { register, handleSubmit, formState: { isSubmitting }, reset, setFocus } = useForm<CreateCommentInput>({
+        defaultValues: { text: defaultText || "" },
         resolver: yupResolver(validationSchema),
     });
 
@@ -43,6 +47,12 @@ export default function CreateCommentBox({ blogPostId, parentCommentId, title, o
             alert(error);
         }
     }
+
+    useEffect(() => {
+        if (parentCommentId) {
+            setFocus("text");
+        }
+    }, [parentCommentId, setFocus]);
 
     if (!user) {
         return (
@@ -66,6 +76,7 @@ export default function CreateCommentBox({ blogPostId, parentCommentId, title, o
                     placeholder="Say something..."
                 />
                 <LoadingButton type="submit" isLoading={isSubmitting}>Send</LoadingButton>
+                {showCancel && <Button onClick={onCancel} className="ms-2" variant="outline-primary">Cancel</Button>}
             </Form>
         </div>
     );
