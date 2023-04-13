@@ -1,0 +1,10 @@
+.imageWrapper {
+    display: flex;
+    justify-content: center;
+    margin: 2rem auto;
+}
+
+.imageWrapper :global(img) {
+    max-width: 100%;
+    cursor: zoom-in;
+}

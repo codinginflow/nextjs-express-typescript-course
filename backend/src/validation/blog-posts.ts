@@ -41,3 +41,7 @@ export const deleteBlogPostSchema = yup.object({
 });
 
 export type DeleteBlogPostParams = yup.InferType<typeof deleteBlogPostSchema>["params"];
+
+export const uploadInPostImageSchema = yup.object({
+    file: imageFileSchema.required("Image required"),
+});

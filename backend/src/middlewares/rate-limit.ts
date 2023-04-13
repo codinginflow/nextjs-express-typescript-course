@@ -31,3 +31,11 @@ export const updatePostRateLimit = rateLimit({
     legacyHeaders: false,
     skipFailedRequests: true,
 });
+
+export const uploadImageRateLimit = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 50,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skipFailedRequests: true,
+});

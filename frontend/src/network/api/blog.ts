@@ -60,6 +60,13 @@ export async function deleteBlogPost(blogPostId: string) {
     await api.delete("/posts/" + blogPostId);
 }
 
+export async function uploadInPostImage(image: File) {
+    const formData = new FormData();
+    formData.append("inPostImage", image);
+    const response = await api.post<{ imageUrl: string }>("/posts/images", formData);
+    return response.data;
+}
+
 export async function getCommentsForBlogPost(blogPostId: string, continueAfterId?: string) {
     const response = await api.get<CommentsPage>(`/posts/${blogPostId}/comments?${continueAfterId ? "continueAfterId=" + continueAfterId : ""}`);
     return response.data;

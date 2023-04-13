@@ -10,6 +10,8 @@ import { BlogPostBody, DeleteBlogPostParams, GetBlogPostsQuery, UpdateBlogPostPa
 import fs from "fs";
 import axios from "axios";
 import { CreateCommentBody, CreateCommentParams, DeleteCommentParams, GetCommentRepliesParams, GetCommentRepliesQuery, GetCommentsParams, GetCommentsQuery, UpdateCommentBody, UpdateCommentParams } from "../validation/comments";
+import crypto from "crypto";
+import path from "path";
 
 export const getBlogPosts: RequestHandler<unknown, unknown, unknown, GetBlogPostsQuery> = async (req, res, next) => {
     const authorId = req.query.authorId;
@@ -187,6 +189,26 @@ export const deleteBlogPost: RequestHandler<DeleteBlogPostParams, unknown, unkno
         await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${postToDelete.slug}?secret=${env.POST_REVALIDATION_KEY}`);
 
         res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const uploadInPostImage: RequestHandler = async (req, res, next) => {
+    const image = req.file;
+
+    try {
+        assertIsDefined(image);
+
+        const fileName = crypto.randomBytes(20).toString("hex");
+
+        const imageDestinationPath = "/uploads/in-post-images/" + fileName + path.extname(image.originalname);
+
+        await sharp(image.buffer)
+            .resize(1920, undefined, { withoutEnlargement: true })
+            .toFile("./" + imageDestinationPath);
+
+        res.status(201).json({ imageUrl: env.SERVER_URL + imageDestinationPath });
     } catch (error) {
         next(error);
     }
