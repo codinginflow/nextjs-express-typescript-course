@@ -71,6 +71,7 @@ export default function BlogPostPage({ fallbackPost }: BlogPostPageProps) {
             <Head>
                 <title>{`${title} - Flow Blog`}</title>
                 <meta name="description" content={summary} />
+                <meta property="og:image" key="og:image" content={featuredImageUrl} />
             </Head>
 
             <div className={styles.container}>

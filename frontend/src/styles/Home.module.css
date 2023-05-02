@@ -1,0 +1,34 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.headlineText {
+    background-image: linear-gradient(90deg, var(--bs-primary), white);
+    background-color: white;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    font-size: calc(1.5rem + 4.5vw);
+    font-weight: bold;
+}
+
+.headlineLogo {
+    width: calc(2rem + 5vw);
+    height: 100%;
+    aspect-ratio: 1;
+}
+
+@media (min-width: 1200px) {
+    .headlineText {
+        font-size: 6rem;
+    }
+
+    .headlineLogo {
+        width: 7rem;
+    }
+}

@@ -26,6 +26,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="description" content="A full-stack NextJS course project by Coding in Flow" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
+        <meta property="og:image" key="og:image" content="https://flowblog.com/social_media_preview_image.png" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <SSRProvider>
