@@ -128,7 +128,7 @@ export default function SignUpModal({ onDismiss, onLoginInsteadClicked }: SignUp
                                 disabled={verificationCodeRequestPending || verificationCodeCooldownSecondsLeft > 0}
                                 onClick={requestVerificationCode}>
                                 Send code
-                                {verificationCodeCooldownSecondsLeft > 0 && `(${verificationCodeCooldownSecondsLeft})`}
+                                {verificationCodeCooldownSecondsLeft > 0 && ` (${verificationCodeCooldownSecondsLeft})`}
                             </Button>
                         }
                     />
@@ -139,14 +139,14 @@ export default function SignUpModal({ onDismiss, onLoginInsteadClicked }: SignUp
                         Sign Up
                     </LoadingButton>
                 </Form>
-                <hr />
-                <SocialSignInSection />
                 <div className="d-flex align-items-center gap-1 justify-content-center mt-1">
                     Already have an account?
                     <Button variant="link" onClick={onLoginInsteadClicked}>
                         Log In
                     </Button>
                 </div>
+                <hr />
+                <SocialSignInSection />
             </Modal.Body>
         </Modal>
     );

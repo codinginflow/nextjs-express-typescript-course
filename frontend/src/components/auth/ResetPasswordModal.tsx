@@ -120,7 +120,7 @@ export default function ResetPasswordModal({ onDismiss, onSignUpClicked }: Reset
                                 disabled={verificationCodeRequestPending || verificationCodeCooldownSecondsLeft > 0}
                                 onClick={requestVerificationCode}>
                                 Send code
-                                {verificationCodeCooldownSecondsLeft > 0 && `(${verificationCodeCooldownSecondsLeft})`}
+                                {verificationCodeCooldownSecondsLeft > 0 && ` (${verificationCodeCooldownSecondsLeft})`}
                             </Button>
                         }
                     />

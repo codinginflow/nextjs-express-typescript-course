@@ -238,7 +238,7 @@ export const getCommentsForBlogPost: RequestHandler<GetCommentsParams, unknown, 
         const endOfPaginationReached = result.length <= pageSize;
 
         const commentsWithRepliesCounts = await Promise.all(comments.map(async comment => {
-            const repliesCount = await CommentModel.countDocuments({ parentCommentId: comment._id });
+            const repliesCount = await CommentModel.countDocuments({ parentCommentId: comment._id }).exec();
             return { ...comment.toObject(), repliesCount }
         }));
 

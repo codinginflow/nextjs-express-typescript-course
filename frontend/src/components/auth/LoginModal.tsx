@@ -88,14 +88,14 @@ export default function LoginModal({ onDismiss, onSignUpInsteadClicked, onForgot
                         Log In
                     </LoadingButton>
                 </Form>
-                <hr />
-                <SocialSignInSection />
                 <div className="d-flex align-items-center gap-1 justify-content-center mt-1">
                     Don&apos;t have an account yet?
                     <Button variant="link" onClick={onSignUpInsteadClicked}>
                         Sign Up
                     </Button>
                 </div>
+                <hr />
+                <SocialSignInSection />
             </Modal.Body>
         </Modal>
     );

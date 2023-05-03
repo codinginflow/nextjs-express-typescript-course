@@ -82,7 +82,6 @@ export default function BlogPostPage({ fallbackPost }: BlogPostPageProps) {
                         <FiEdit />
                         Edit post
                     </Link>
-
                 }
 
                 <div className="text-center mb-4">

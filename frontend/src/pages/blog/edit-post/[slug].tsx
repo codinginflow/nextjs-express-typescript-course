@@ -66,7 +66,7 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
 
     async function onSubmit({ slug, title, summary, body, featuredImage }: EditPostFormData) {
         try {
-            await BlogApi.updateBlogPost(post._id, { slug, title, summary, body, featuredImage: featuredImage?.item(0) || undefined })
+            await BlogApi.updateBlogPost(post._id, { slug, title, summary, body, featuredImage: featuredImage?.item(0) || undefined });
             await router.push("/blog/" + slug);
         } catch (error) {
             console.error(error);
@@ -149,7 +149,8 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
                         <LoadingButton
                             type="submit"
                             isLoading={isSubmitting}
-                            disabled={deletePending}>Update post
+                            disabled={deletePending}>
+                            Update post
                         </LoadingButton>
                         <Button
                             onClick={() => setShowDeleteConfirmationDialog(true)}

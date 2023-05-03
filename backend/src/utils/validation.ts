@@ -19,7 +19,7 @@ export const imageFileSchema = yup.mixed<Express.Multer.File>()
 
 export const objectIdSchema = yup.string()
     .test(
-        "is-object",
+        "is-objectid",
         "${path} is not a valid ObjectId",
         value => !value || mongoose.Types.ObjectId.isValid(value),
     );
