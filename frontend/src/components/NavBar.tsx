@@ -6,13 +6,10 @@ import logo from "@/assets/images/flow-blog-logo.png";
 import Image from "next/image";
 import styles from "@/styles/NavBar.module.css";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import { useContext, useState } from "react";
-import LoginModal from "./auth/LoginModal";
-import SignUpModal from "./auth/SignUpModal";
+import { useContext } from "react";
 import { User } from "@/models/user";
 import profilePicPlaceholder from "@/assets/images/profile-pic-placeholder.png";
 import * as UsersApi from "@/network/api/users";
-import ResetPasswordModal from "./auth/ResetPasswordModal";
 import { AuthModalsContext } from "./auth/AuthModalsProvider";
 
 export default function NavBar() {

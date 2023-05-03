@@ -1,4 +1,4 @@
-import { BlogPost, BlogPostsPage } from "@/models/blog-post";
+import { BlogPostsPage } from "@/models/blog-post";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import * as BlogApi from "@/network/api/blog";
@@ -41,7 +41,7 @@ interface BlogPageProps {
 
 export default function BlogPage({ data: { blogPosts, page, totalPages } }: BlogPageProps) {
     const router = useRouter();
-    
+
     return (
         <>
             <Head>
@@ -53,7 +53,7 @@ export default function BlogPage({ data: { blogPosts, page, totalPages } }: Blog
                 <h1>Blog</h1>
                 {blogPosts.length > 0 && <BlogPostsGrid posts={blogPosts} />}
                 <div className="d-flex flex-column align-items-center">
-                    {blogPosts.length === 0 && <p>No blog posts found</p> }
+                    {blogPosts.length === 0 && <p>No blog posts found</p>}
                     {blogPosts.length > 0 &&
                         <PaginationBar
                             currentPage={page}

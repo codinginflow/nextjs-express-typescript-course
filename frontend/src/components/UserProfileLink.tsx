@@ -50,9 +50,9 @@ function UserTooltipContent({ user: { username, about, profilePicUrl, createdAt 
                 className="rounded-circle mb-1"
             />
             <div className="text-start">
-                <strong>Username:</strong> {username} <br/>
-                <strong>User since:</strong> {formatDate(createdAt)} <br/>
-                { about && <><strong>About:</strong> {about}</> }
+                <strong>Username:</strong> {username} <br />
+                <strong>User since:</strong> {formatDate(createdAt)} <br />
+                {about && <><strong>About:</strong> {about}</>}
             </div>
         </div>
     );

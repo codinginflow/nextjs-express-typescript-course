@@ -1,4 +1,4 @@
-import { Button, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import BlogPostEntry from "@/components/BlogPostEntry";
 import { BlogPost } from "@/models/blog-post";
 import styles from "@/styles/BlogPostsGrid.module.css";

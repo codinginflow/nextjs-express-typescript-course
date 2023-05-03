@@ -2,7 +2,6 @@ import { Comment as CommentModel } from "@/models/comment";
 import { useCallback, useEffect, useState } from "react";
 import * as BlogApi from "@/network/api/blog";
 import CreateCommentBox from "./CreateCommentBox";
-import Comment from "./Comment";
 import { Button, Spinner } from "react-bootstrap";
 import CommentThread from "./CommentThread";
 

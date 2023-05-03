@@ -13,8 +13,8 @@ export default async function handler(
 
   try {
     await res.revalidate("/blog/" + req.query.slug);
-    res.status(200).json({ message: "Revalidation successful"});
+    res.status(200).json({ message: "Revalidation successful" });
   } catch (error) {
-    res.status(500).json({ error: "Error revalidating"});
+    res.status(500).json({ error: "Error revalidating" });
   }
 }

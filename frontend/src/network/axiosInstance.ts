@@ -1,5 +1,5 @@
 import axios from "axios";
-import {BadRequestError, UnauthorizedError, NotFoundError, ConflictError, TooManyRequestsError} from "./http-errors";
+import { BadRequestError, UnauthorizedError, NotFoundError, ConflictError, TooManyRequestsError } from "./http-errors";
 
 const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,

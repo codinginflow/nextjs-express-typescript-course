@@ -4,4 +4,4 @@ declare module "express-session" {
     }
 }
 
-export { }
+export { };

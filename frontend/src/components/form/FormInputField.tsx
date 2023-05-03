@@ -14,16 +14,16 @@ export default function FormInputField({ register, label, error, inputGroupEleme
         <Form.Group className="mb-3" controlId={register.name + "-input"}>
             {label && <Form.Label>{label}</Form.Label>}
             <InputGroup hasValidation>
-            <Form.Control
-                {...register}
-                {...props}
-                isInvalid={!!error}
-                aria-describedby={inputGroupElement?.props.id}
-            />
-            {inputGroupElement}
-            <Form.Control.Feedback type="invalid">
-                {error?.message}
-            </Form.Control.Feedback>
+                <Form.Control
+                    {...register}
+                    {...props}
+                    isInvalid={!!error}
+                    aria-describedby={inputGroupElement?.props.id}
+                />
+                {inputGroupElement}
+                <Form.Control.Feedback type="invalid">
+                    {error?.message}
+                </Form.Control.Feedback>
             </InputGroup>
         </Form.Group>
     );

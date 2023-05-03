@@ -4,7 +4,6 @@ import * as UsersApi from "@/network/api/users";
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
 import LoadingButton from "../LoadingButton";
-import { AxiosError } from "axios";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { useState } from "react";
 import { BadRequestError, ConflictError } from "@/network/http-errors";

@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic';
 import { Form } from 'react-bootstrap';
 import { FieldError, UseFormRegisterReturn, UseFormSetValue, UseFormWatch } from "react-hook-form";
-import ReactMarkdown from "react-markdown";
 import * as BlogApi from "@/network/api/blog";
 import Markdown from '../Markdown';
 
@@ -38,10 +37,10 @@ export default function MarkdownEditor({ register, watch, setValue, label, error
                 id={register.name + "-input"}
                 renderHTML={text => <Markdown>{text}</Markdown>}
                 value={watch(register.name)}
-                onChange={({ text }) => setValue(register.name, text, {shouldValidate: true, shouldDirty: true})}
+                onChange={({ text }) => setValue(register.name, text, { shouldValidate: true, shouldDirty: true })}
                 placeholder="Write something..."
                 className={error ? "is-invalid" : ""}
-                style={{height: editorHeight}}
+                style={{ height: editorHeight }}
                 onImageUpload={uploadInPostImage}
                 imageAccept=".jpg,.png"
             />

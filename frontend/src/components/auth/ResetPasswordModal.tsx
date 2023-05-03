@@ -11,7 +11,6 @@ import { Alert, Button, Form, Modal } from "react-bootstrap";
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
 import LoadingButton from "../LoadingButton";
-import SocialSignInSection from "./SocialSignInSection";
 
 const validationSchema = yup.object({
     email: emailSchema.required("Required"),

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Container } from "react-bootstrap";
 
 export default function Footer() {
-    return(
+    return (
         <footer className={styles.footer}>
             <Container>
                 <p>© {new Date().getFullYear()} Coding in Flow</p>
