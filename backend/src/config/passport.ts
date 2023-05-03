@@ -70,7 +70,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GitHubStrategy({
     clientID: env.GITHUB_CLIENT_ID,
     clientSecret: env.GITHUB_CLIENT_SECRET,
-    callbackURL: "/users/oauth2/redirect/github",
+    callbackURL: env.SERVER_URL + "/users/oauth2/redirect/github",
 }, async (accessToken: string, refreshToken: string, profile: Profile, cb: VerifyCallback) => {
     try {
         let user = await UserModel.findOne({ githubId: profile.id }).exec();

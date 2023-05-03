@@ -1,16 +1,22 @@
 import RedisStore from "connect-redis";
-import { SessionOptions } from "express-session";
+import { SessionOptions, CookieOptions } from "express-session";
 import env from "../env";
 import crypto from "crypto";
 import redisClient from "./redisClient";
+
+const cookieConfig: CookieOptions = {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+}
+
+if (env.NODE_ENV === "production") {
+    cookieConfig.secure = true;
+}
 
 const sessionConfig: SessionOptions = {
     secret: env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-    },
+    cookie: cookieConfig,
     rolling: true,
     store: new RedisStore({
         client: redisClient,
