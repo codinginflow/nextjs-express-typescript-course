@@ -1,0 +1,15 @@
+.brandText {
+    background-image: linear-gradient(90deg, var(--bs-primary), white);
+    background-color: white;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.accountDropdown :global(.dropdown-toggle) {
+    padding-top: 0;
+    padding-bottom: 0;
+}

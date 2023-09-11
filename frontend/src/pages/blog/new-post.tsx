@@ -10,7 +10,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { requiredFileSchema, requiredStringSchema, slugSchema } from "@/utils/validation";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import useUnsavedChangesWarning from "@/hooks/useUnsavedChangesWarning";
 
 const validationSchema = yup.object({
     slug: slugSchema.required("Required"),
@@ -45,8 +44,6 @@ export default function CreateBlogPostPage() {
         const slug = generateSlug(getValues("title"));
         setValue("slug", slug, { shouldValidate: true });
     }
-
-    useUnsavedChangesWarning(isDirty && !isSubmitting);
 
     if (!userLoading && !user) router.push("/");
 

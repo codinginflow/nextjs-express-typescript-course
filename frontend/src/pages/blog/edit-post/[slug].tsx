@@ -15,7 +15,6 @@ import LoadingButton from "@/components/LoadingButton";
 import { generateSlug } from "@/utils/utils";
 import { useState } from "react";
 import ConfirmationModal from "@/components/ConfirmationModal";
-import useUnsavedChangesWarning from "@/hooks/useUnsavedChangesWarning";
 
 export const getServerSideProps: GetServerSideProps<EditBlogPostPageProps> = async ({ params }) => {
     try {
@@ -92,8 +91,6 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
         const slug = generateSlug(getValues("title"));
         setValue("slug", slug, { shouldValidate: true });
     }
-
-    useUnsavedChangesWarning(isDirty && !isSubmitting && !deletePending);
 
     const userIsAuthorized = (user && user._id === post.author._id) || false;
 

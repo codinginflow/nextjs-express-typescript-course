@@ -1,7 +1,7 @@
-import styles from '@/styles/Home.module.css'
-import logo from "../assets/images/flow-blog-logo.png";
+import styles from './Home.module.css'
+import logo from "@/assets/images/flow-blog-logo.png";
 import Image from 'next/image';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row } from "@/components/bootstrap";
 
 export default function Home() {
   return (

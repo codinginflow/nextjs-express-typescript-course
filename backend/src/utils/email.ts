@@ -2,7 +2,7 @@ import { createTransport } from "nodemailer";
 import env from "../env";
 
 const transporter = createTransport({
-    host: "smtp-relay.sendinblue.com",
+    host: "smtp-relay.brevo.com",
     port: 587,
     auth: {
         user: "codinginflow.recording@gmail.com",

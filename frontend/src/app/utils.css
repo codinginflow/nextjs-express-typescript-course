@@ -1,0 +1,15 @@
+.small {
+    font-size: 0.875rem;
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.w-fit-content {
+    width: fit-content;
+}
+
+.pre-line {
+    white-space: pre-line;
+}

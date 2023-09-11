@@ -9,15 +9,12 @@ import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import NextNProgress from "nextjs-progressbar";
 import { useEffect } from 'react';
 import { Container, SSRProvider } from "react-bootstrap";
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function App({ Component, pageProps }: AppProps) {
-
-  useOnboardingRedirect();
 
   return (
     <>
@@ -33,7 +30,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <SSRProvider>
         <AuthModalsProvider>
           <div className={inter.className}>
-            <NextNProgress color='#21FA90' />
             <NavBar />
             <main>
               <Container className={styles.pageContainer}>
@@ -46,15 +42,4 @@ export default function App({ Component, pageProps }: AppProps) {
       </SSRProvider>
     </>
   );
-}
-
-function useOnboardingRedirect() {
-  const { user } = useAuthenticatedUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (user && !user.username && router.pathname !== "/onboarding") {
-      router.push("/onboarding?returnTo=" + router.asPath);
-    }
-  }, [user, router]);
 }
