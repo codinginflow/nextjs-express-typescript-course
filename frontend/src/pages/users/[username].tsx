@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import FormInputField from "@/components/form/FormInputField";
 import LoadingButton from "@/components/LoadingButton";
 import useSWR from "swr";
-import BlogPostsGrid from "@/components/BlogPostsGrid";
+import BlogPostsGrid from "@/components/blog/BlogPostsGrid";
 import { NotFoundError } from "@/network/http-errors";
 import PaginationBar from "@/components/PaginationBar";
 
