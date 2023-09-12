@@ -11,6 +11,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import styles from "./BlogPostPage.module.css";
 import EditPostButton from "./EditPostButton";
+import { unstable_cache } from "next/cache";
 
 // This page is statically rendered and only updates after manual revalidation
 
@@ -18,7 +19,7 @@ interface BlogPostPageProps {
     params: { slug: string }
 }
 
-const getPost = cache(async function (slug: string) {
+const getPost = (slug: string) => unstable_cache(async function (slug: string) {
     try {
         return await BlogApi.getBlogPostBySlug(slug);
     } catch (error) {
@@ -28,7 +29,10 @@ const getPost = cache(async function (slug: string) {
             throw error;
         }
     }
-})
+},
+    [slug],
+    { tags: [slug] }
+)(slug);
 
 export async function generateMetadata({ params: { slug } }: BlogPostPageProps): Promise<Metadata> {
     const blogPost = await getPost(slug);

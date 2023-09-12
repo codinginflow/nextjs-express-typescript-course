@@ -8,7 +8,7 @@ import env from "../env";
 import createHttpError from "http-errors";
 import { BlogPostBody, DeleteBlogPostParams, GetBlogPostsQuery, UpdateBlogPostParams } from "../validation/blog-posts";
 import fs from "fs";
-// import axios from "axios";
+import axios from "axios";
 import { CreateCommentBody, CreateCommentParams, DeleteCommentParams, GetCommentRepliesParams, GetCommentRepliesQuery, GetCommentsParams, GetCommentsQuery, UpdateCommentBody, UpdateCommentParams } from "../validation/comments";
 import crypto from "crypto";
 import path from "path";
@@ -154,7 +154,7 @@ export const updateBlogPost: RequestHandler<UpdateBlogPostParams, unknown, BlogP
 
         await postToEdit.save();
 
-        // await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${slug}?secret=${env.POST_REVALIDATION_KEY}`);
+        await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${slug}?secret=${env.POST_REVALIDATION_KEY}`);
 
         res.sendStatus(200);
     } catch (error) {
@@ -186,7 +186,7 @@ export const deleteBlogPost: RequestHandler<DeleteBlogPostParams, unknown, unkno
 
         await postToDelete.deleteOne();
 
-        // await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${postToDelete.slug}?secret=${env.POST_REVALIDATION_KEY}`);
+        await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${postToDelete.slug}?secret=${env.POST_REVALIDATION_KEY}`);
 
         res.sendStatus(204);
     } catch (error) {

@@ -53,6 +53,7 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
         setIsSubmitting(true);
         try {
             await BlogApi.updateBlogPost(post._id, { slug, title, summary, body, featuredImage: featuredImage?.item(0) || undefined });
+            router.refresh();
             router.push("/blog/" + slug);
         } catch (error) {
             setIsSubmitting(false);
@@ -66,6 +67,7 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
         setDeletePending(true);
         try {
             await BlogApi.deleteBlogPost(post._id);
+            router.refresh();
             router.push("/blog");
         } catch (error) {
             setDeletePending(false);
