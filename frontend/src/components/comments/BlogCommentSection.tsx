@@ -1,3 +1,5 @@
+"use client";
+
 import { Comment as CommentModel } from "@/models/comment";
 import { useCallback, useEffect, useState } from "react";
 import * as BlogApi from "@/network/api/blog";
