@@ -1,3 +1,5 @@
+"use client";
+
 import { Form, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as BlogApi from "@/network/api/blog";
@@ -5,11 +7,12 @@ import FormInputField from "@/components/form/FormInputField";
 import MarkdownEditor from "@/components/form/MarkdownEditor";
 import { generateSlug } from "@/utils/utils";
 import LoadingButton from "@/components/LoadingButton";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { requiredFileSchema, requiredStringSchema, slugSchema } from "@/utils/validation";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import { useState } from "react";
 
 const validationSchema = yup.object({
     slug: slugSchema.required("Required"),
@@ -25,15 +28,19 @@ export default function CreateBlogPostPage() {
     const { user, userLoading } = useAuthenticatedUser();
     const router = useRouter();
 
-    const { register, handleSubmit, setValue, getValues, watch, formState: { errors, isSubmitting, isDirty } } = useForm<CreatePostFormData>({
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<CreatePostFormData>({
         resolver: yupResolver(validationSchema),
     });
 
     async function onSubmit({ title, slug, summary, featuredImage, body }: CreatePostFormData) {
+        setIsSubmitting(true);
         try {
             await BlogApi.createBlogPost({ title, slug, summary, featuredImage: featuredImage[0], body });
-            await router.push("/blog/" + slug);
+            router.push("/blog/" + slug);
         } catch (error) {
+            setIsSubmitting(false);
             console.error(error);
             alert(error);
         }

@@ -1,36 +1,20 @@
-import { BlogPost } from "@/models/blog-post";
-import { GetServerSideProps } from "next";
-import * as BlogApi from "@/network/api/blog";
-import { NotFoundError } from "@/network/http-errors";
-import * as yup from "yup";
-import { requiredStringSchema, slugSchema } from "@/utils/validation";
-import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Form, Spinner } from "react-bootstrap";
+"use client";
+
+import ConfirmationModal from "@/components/ConfirmationModal";
+import LoadingButton from "@/components/LoadingButton";
 import FormInputField from "@/components/form/FormInputField";
 import MarkdownEditor from "@/components/form/MarkdownEditor";
-import LoadingButton from "@/components/LoadingButton";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import { BlogPost } from "@/models/blog-post";
+import * as BlogApi from "@/network/api/blog";
 import { generateSlug } from "@/utils/utils";
+import { requiredStringSchema, slugSchema } from "@/utils/validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import ConfirmationModal from "@/components/ConfirmationModal";
-
-export const getServerSideProps: GetServerSideProps<EditBlogPostPageProps> = async ({ params }) => {
-    try {
-        const slug = params?.slug?.toString();
-        if (!slug) throw Error("slug missing");
-
-        const post = await BlogApi.getBlogPostBySlug(slug);
-        return { props: { post } };
-    } catch (error) {
-        if (error instanceof NotFoundError) {
-            return { notFound: true };
-        } else {
-            throw error;
-        }
-    }
-}
+import { Button, Form, Spinner } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
 interface EditBlogPostPageProps {
     post: BlogPost,
@@ -50,10 +34,12 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
     const { user, userLoading } = useAuthenticatedUser();
     const router = useRouter();
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] = useState(false);
     const [deletePending, setDeletePending] = useState(false);
 
-    const { register, handleSubmit, setValue, getValues, watch, formState: { errors, isSubmitting, isDirty } } = useForm<EditPostFormData>({
+    const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<EditPostFormData>({
         resolver: yupResolver(validationSchema),
         defaultValues: {
             slug: post.slug,
@@ -64,10 +50,12 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
     });
 
     async function onSubmit({ slug, title, summary, body, featuredImage }: EditPostFormData) {
+        setIsSubmitting(true);
         try {
             await BlogApi.updateBlogPost(post._id, { slug, title, summary, body, featuredImage: featuredImage?.item(0) || undefined });
-            await router.push("/blog/" + slug);
+            router.push("/blog/" + slug);
         } catch (error) {
+            setIsSubmitting(false);
             console.error(error);
             alert(error);
         }
