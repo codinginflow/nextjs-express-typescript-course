@@ -1,15 +1,15 @@
-import { useForm } from "react-hook-form";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import * as UsersApi from "@/network/api/users";
+import { TooManyRequestsError, UnauthorizedError } from "@/network/http-errors";
+import { requiredStringSchema } from "@/utils/validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import LoadingButton from "../LoadingButton";
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
-import LoadingButton from "../LoadingButton";
-import { useState } from "react";
-import { TooManyRequestsError, UnauthorizedError } from "@/network/http-errors";
-import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { requiredStringSchema } from "@/utils/validation";
 import SocialSignInSection from "./SocialSignInSection";
 
 const validationSchema = yup.object({

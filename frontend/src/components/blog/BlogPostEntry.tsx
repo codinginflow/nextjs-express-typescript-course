@@ -1,8 +1,8 @@
-import { BlogPost } from "@/models/blog-post";
-import Link from "next/link";
 import { Card, CardBody, CardText, CardTitle } from "@/components/bootstrap";
+import { BlogPost } from "@/models/blog-post";
 import { formatDate } from "@/utils/utils";
 import Image from "next/image";
+import Link from "next/link";
 import UserProfileLink from "../UserProfileLink";
 
 interface BlogPostEntryProps {

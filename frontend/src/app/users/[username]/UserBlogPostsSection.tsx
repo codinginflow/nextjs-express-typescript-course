@@ -1,12 +1,12 @@
 "use client";
 
-import { User } from "@/models/user";
-import { useState } from "react";
-import useSWR from "swr";
-import * as BlogApi from "@/network/api/blog";
-import BlogPostsGrid from "@/components/blog/BlogPostsGrid";
 import PaginationBar from "@/components/PaginationBar";
+import BlogPostsGrid from "@/components/blog/BlogPostsGrid";
+import { User } from "@/models/user";
+import * as BlogApi from "@/network/api/blog";
+import { useState } from "react";
 import { Spinner } from "react-bootstrap";
+import useSWR from "swr";
 
 interface UserBlogPostsSectionProps {
     user: User,

@@ -1,16 +1,16 @@
 import profilePicPlaceholder from "@/assets/images/profile-pic-placeholder.png";
+import { Col, Row } from "@/components/bootstrap";
 import { User } from "@/models/user";
 import * as UsersApi from "@/network/api/users";
 import { NotFoundError } from "@/network/http-errors";
-import styles from "./UserProfilePage.module.css";
 import { formatDate } from "@/utils/utils";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { Col, Row } from "@/components/bootstrap";
 import UpdateUserProfileSection from "./UpdateUserProfileSection";
 import UserBlogPostsSection from "./UserBlogPostsSection";
+import styles from "./UserProfilePage.module.css";
 
 // This page is automatically dynamically rendered because we use params without generateStaticParams
 

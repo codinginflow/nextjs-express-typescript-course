@@ -1,6 +1,6 @@
 import { Col, Row } from "@/components/bootstrap";
-import BlogPostEntry from "./BlogPostEntry";
 import { BlogPost } from "@/models/blog-post";
+import BlogPostEntry from "./BlogPostEntry";
 import styles from "./BlogPostsGrid.module.css";
 
 interface BlogPostsGridProps {

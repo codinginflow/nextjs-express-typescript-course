@@ -21,6 +21,6 @@ export default async function Page({ params: { slug } }: PageProps) {
             throw error;
         }
     }
-    return <EditBlogPostPage post={post} />
+    return <EditBlogPostPage post={post} />;
 }
 

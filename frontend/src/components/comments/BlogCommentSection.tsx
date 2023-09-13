@@ -1,11 +1,11 @@
 "use client";
 
 import { Comment as CommentModel } from "@/models/comment";
-import { useCallback, useEffect, useState } from "react";
 import * as BlogApi from "@/network/api/blog";
-import CreateCommentBox from "./CreateCommentBox";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import CommentThread from "./CommentThread";
+import CreateCommentBox from "./CreateCommentBox";
 
 interface BlogCommentSectionProps {
     blogPostId: string,

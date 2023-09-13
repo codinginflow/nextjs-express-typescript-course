@@ -1,17 +1,17 @@
-import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import * as UsersApi from "@/network/api/users";
-import FormInputField from "../form/FormInputField";
-import PasswordInputField from "../form/PasswordInputField";
-import LoadingButton from "../LoadingButton";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import { useState } from "react";
+import useCountdown from "@/hooks/useCountdown";
+import * as UsersApi from "@/network/api/users";
 import { BadRequestError, ConflictError } from "@/network/http-errors";
-import * as yup from "yup";
 import { emailSchema, passwordSchema, requiredStringSchema, usernameSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import LoadingButton from "../LoadingButton";
+import FormInputField from "../form/FormInputField";
+import PasswordInputField from "../form/PasswordInputField";
 import SocialSignInSection from "./SocialSignInSection";
-import useCountdown from "@/hooks/useCountdown";
 
 const validationSchema = yup.object({
     username: usernameSchema.required("Required"),

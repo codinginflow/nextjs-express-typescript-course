@@ -1,9 +1,9 @@
 "use client";
 
-import { ReactNode, createContext, useState } from "react";
 import LoginModal from "@/components/auth/LoginModal";
-import SignUpModal from "@/components/auth/SignUpModal";
 import ResetPasswordModal from "@/components/auth/ResetPasswordModal";
+import SignUpModal from "@/components/auth/SignUpModal";
+import { ReactNode, createContext, useState } from "react";
 
 interface AuthModalsContext {
     showLoginModal: () => void,

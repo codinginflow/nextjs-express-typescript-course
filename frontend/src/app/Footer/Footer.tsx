@@ -1,6 +1,6 @@
-import styles from "./Footer.module.css";
-import Link from "next/link";
 import { Container } from "@/components/bootstrap";
+import Link from "next/link";
+import styles from "./Footer.module.css";
 
 export default function Footer() {
     return (

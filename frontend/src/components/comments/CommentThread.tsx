@@ -1,8 +1,8 @@
 import { Comment as CommentModel } from "@/models/comment";
-import { useState } from "react";
 import * as BlogApi from "@/network/api/blog";
-import Comment from "./Comment";
+import { useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
+import Comment from "./Comment";
 
 interface CommentThreadProps {
     comment: CommentModel,

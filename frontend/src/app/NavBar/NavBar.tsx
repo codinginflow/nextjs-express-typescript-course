@@ -1,18 +1,18 @@
 "use client";
 
+import logo from "@/assets/images/flow-blog-logo.png";
+import profilePicPlaceholder from "@/assets/images/profile-pic-placeholder.png";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import { User } from "@/models/user";
+import * as UsersApi from "@/network/api/users";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useContext } from "react";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { FiEdit } from "react-icons/fi";
-import logo from "@/assets/images/flow-blog-logo.png";
-import Image from "next/image";
-import styles from "./NavBar.module.css";
-import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import { useContext } from "react";
-import { User } from "@/models/user";
-import profilePicPlaceholder from "@/assets/images/profile-pic-placeholder.png";
-import * as UsersApi from "@/network/api/users";
 import { AuthModalsContext } from "../AuthModalsProvider";
+import styles from "./NavBar.module.css";
 
 export default function NavBar() {
     const { user } = useAuthenticatedUser();

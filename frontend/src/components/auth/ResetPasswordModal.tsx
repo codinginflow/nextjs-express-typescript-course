@@ -1,16 +1,16 @@
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import useCountdown from "@/hooks/useCountdown";
+import * as UsersApi from "@/network/api/users";
 import { BadRequestError, ConflictError, NotFoundError } from "@/network/http-errors";
 import { emailSchema, passwordSchema, requiredStringSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import * as UsersApi from "@/network/api/users";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import LoadingButton from "../LoadingButton";
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
-import LoadingButton from "../LoadingButton";
 
 const validationSchema = yup.object({
     email: emailSchema.required("Required"),

@@ -1,13 +1,13 @@
-import { Metadata } from "next";
 import "./globals.scss";
 import "./utils.css";
-import { Inter } from 'next/font/google';
-import AuthModalsProvider from "./AuthModalsProvider";
 import { Container } from "@/components/bootstrap";
-import NavBar from "./NavBar/NavBar";
-import Footer from "./Footer/Footer";
-import OnboardingRedirect from "./OnboardingRedirect";
+import { Metadata } from "next";
+import { Inter } from 'next/font/google';
 import { Suspense } from "react";
+import AuthModalsProvider from "./AuthModalsProvider";
+import Footer from "./Footer/Footer";
+import NavBar from "./NavBar/NavBar";
+import OnboardingRedirect from "./OnboardingRedirect";
 
 const inter = Inter({ subsets: ['latin'] });
 
