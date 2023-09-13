@@ -1,4 +1,4 @@
-import Markdown from "@/components/Markdown";
+import Markdown from "@/components/Markdown/Markdown";
 import UserProfileLink from "@/components/UserProfileLink";
 import BlogCommentSection from "@/components/comments/BlogCommentSection";
 import * as BlogApi from "@/network/api/blog";

@@ -1,14 +1,16 @@
-import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import { usernameSchema } from "@/utils/validation";
-import { useRouter } from "next/router";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as UsersApi from "@/network/api/users";
-import { Form } from "react-bootstrap";
-import FormInputField from "@/components/form/FormInputField";
+"use client";
+
 import LoadingButton from "@/components/LoadingButton";
+import FormInputField from "@/components/form/FormInputField";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import * as UsersApi from "@/network/api/users";
+import { usernameSchema } from "@/utils/validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { Form } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
 const validationSchema = yup.object({
     username: usernameSchema.required("Required"),
@@ -18,7 +20,9 @@ type OnboardingInput = yup.InferType<typeof validationSchema>;
 
 export default function OnboardingPage() {
     const { user, mutateUser } = useAuthenticatedUser();
+
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<OnboardingInput>({
         resolver: yupResolver(validationSchema),
@@ -36,10 +40,10 @@ export default function OnboardingPage() {
 
     useEffect(() => {
         if (user?.username) {
-            const returnTo = router.query.returnTo?.toString();
+            const returnTo = decodeURIComponent(searchParams?.get("returnTo") || "");
             router.push(returnTo || "/");
         }
-    }, [user, router]);
+    }, [user, router, searchParams]);
 
     return (
         <div>

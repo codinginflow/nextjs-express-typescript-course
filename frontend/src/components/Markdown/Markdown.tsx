@@ -2,7 +2,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
-import styles from "@/styles/Markdown.module.css";
+import styles from "./Markdown.module.css";
 
 interface MarkdownProps {
     children: string,

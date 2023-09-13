@@ -2,7 +2,7 @@ import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { Comment } from "@/models/comment";
 import { useContext, useEffect } from "react";
 import * as yup from "yup";
-import { AuthModalsContext } from "../auth/AuthModalsProvider";
+import { AuthModalsContext } from "@/app/AuthModalsProvider";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as BlogApi from "@/network/api/blog";

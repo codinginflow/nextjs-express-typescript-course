@@ -4,7 +4,7 @@ import { formatRelativeDate } from "@/utils/utils";
 import EditCommentBox from "./EditCommentBox";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { useContext, useState } from "react";
-import { AuthModalsContext } from "../auth/AuthModalsProvider";
+import { AuthModalsContext } from "@/app/AuthModalsProvider";
 import { Button } from "react-bootstrap";
 import CreateCommentBox from "./CreateCommentBox";
 import { NotFoundError } from "@/network/http-errors";
