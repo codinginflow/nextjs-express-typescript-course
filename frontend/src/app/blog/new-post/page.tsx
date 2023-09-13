@@ -1,18 +1,19 @@
 "use client";
 
-import { Form, Spinner } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import * as BlogApi from "@/network/api/blog";
+import LoadingButton from "@/components/LoadingButton";
 import FormInputField from "@/components/form/FormInputField";
 import MarkdownEditor from "@/components/form/MarkdownEditor";
-import { generateSlug } from "@/utils/utils";
-import LoadingButton from "@/components/LoadingButton";
-import { useRouter } from "next/navigation";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { requiredFileSchema, requiredStringSchema, slugSchema } from "@/utils/validation";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import { useState } from "react";
+import useAutoSave from "@/hooks/useAutoSave";
+import * as BlogApi from "@/network/api/blog";
+import { generateSlug } from "@/utils/utils";
+import { requiredFileSchema, requiredStringSchema, slugSchema } from "@/utils/validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Form, Spinner } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
 const validationSchema = yup.object({
     slug: slugSchema.required("Required"),
@@ -30,14 +31,25 @@ export default function CreateBlogPostPage() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<CreatePostFormData>({
+    const { register, handleSubmit, setValue, getValues, watch, reset, formState: { errors } } = useForm<CreatePostFormData>({
         resolver: yupResolver(validationSchema),
     });
+
+    const { getValue: getAutoSavedValue, clearValue: clearAutoSavedValue } =
+        useAutoSave("new-post-input", { ...watch(), featuredImage: undefined });
+
+    useEffect(() => {
+        const autoSavedValue = getAutoSavedValue();
+        if (autoSavedValue) {
+            reset(autoSavedValue);
+        }
+    }, [getAutoSavedValue, reset]);
 
     async function onSubmit({ title, slug, summary, featuredImage, body }: CreatePostFormData) {
         setIsSubmitting(true);
         try {
             await BlogApi.createBlogPost({ title, slug, summary, featuredImage: featuredImage[0], body });
+            clearAutoSavedValue();
             router.push("/blog/" + slug);
         } catch (error) {
             setIsSubmitting(false);

@@ -5,13 +5,14 @@ import LoadingButton from "@/components/LoadingButton";
 import FormInputField from "@/components/form/FormInputField";
 import MarkdownEditor from "@/components/form/MarkdownEditor";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import useAutoSave from "@/hooks/useAutoSave";
 import { BlogPost } from "@/models/blog-post";
 import * as BlogApi from "@/network/api/blog";
 import { generateSlug } from "@/utils/utils";
 import { requiredStringSchema, slugSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -39,7 +40,7 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
     const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] = useState(false);
     const [deletePending, setDeletePending] = useState(false);
 
-    const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<EditPostFormData>({
+    const { register, handleSubmit, setValue, getValues, watch, reset, formState: { errors } } = useForm<EditPostFormData>({
         resolver: yupResolver(validationSchema),
         defaultValues: {
             slug: post.slug,
@@ -49,10 +50,21 @@ export default function EditBlogPostPage({ post }: EditBlogPostPageProps) {
         }
     });
 
+    const { getValue: getAutoSavedValue, clearValue: clearAutoSavedValue } =
+        useAutoSave("edit-post-input-" + post._id, { ...watch(), featuredImage: undefined });
+
+    useEffect(() => {
+        const autoSavedValue = getAutoSavedValue();
+        if (autoSavedValue) {
+            reset(autoSavedValue);
+        }
+    }, [getAutoSavedValue, reset]);
+
     async function onSubmit({ slug, title, summary, body, featuredImage }: EditPostFormData) {
         setIsSubmitting(true);
         try {
             await BlogApi.updateBlogPost(post._id, { slug, title, summary, body, featuredImage: featuredImage?.item(0) || undefined });
+            clearAutoSavedValue();
             router.refresh();
             router.push("/blog/" + slug);
         } catch (error) {
