@@ -1,8 +1,14 @@
-# Full-Stack NextJS With Express and TypeScript Course
+# Full-Stack Next.js With Express and TypeScript Course
 
 **This is the project we build in my course: https://codinginflow.com/nextjs**
 
-It's a full-stack blogging website similar to Medium.com
+It's a full-stack blogging website similar to Medium.com.
+
+---
+
+**Update**: The whole project has just been updated to the new **Next.js app router**. Check out the `App-Router-Migration` branch.
+
+---
 
 **👀 Features:**
 
@@ -16,8 +22,8 @@ It's a full-stack blogging website similar to Medium.com
 
 **💡 Concepts covered:**
 
-- Advanced NextJS **server-side rendering strategies** like on-demand revalidation
-- Client-side **request caching & revalidation** using **SWR** (NextJS' React-Query alternative)
+- Advanced Next.js **server-side rendering strategies** like on-demand revalidation
+- Client-side **request caching & revalidation** using **SWR** (Next.js' React-Query alternative)
 - **Advanced React concepts** like context providers and custom hooks
 - **Form handling** with React-Hook-Form and Yup
 - **Security best practices** like validation of user input & file uploads, and rate-limiting
